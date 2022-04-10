@@ -4,11 +4,10 @@ import { GameContext } from "../contexts/GameContext";
 import { Button } from "./style";
 
 export const Header: React.FC = () => {
-  const { nbBars, nbFoobars, nbFoos, nbRobots, dispatchGame } =
+  const { nbBars, nbFoobars, nbFoos, nbRobots, nbFreeRobots, dispatchGame } =
     useContext(GameContext);
 
   const startNewGame = () => {
-    console.log("go");
     dispatchGame({ type: "resetGame" });
   };
 
@@ -18,6 +17,7 @@ export const Header: React.FC = () => {
 
       <StyledUl>
         <StyledLi>{nbRobots} robots</StyledLi>
+        <StyledLi>{nbFreeRobots} robots disponibles</StyledLi>
         <StyledLi>{nbFoos} foo</StyledLi>
         <StyledLi>{nbBars} bar</StyledLi>
         <StyledLi>{nbFoobars} foobar</StyledLi>

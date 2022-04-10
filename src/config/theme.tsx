@@ -14,7 +14,7 @@ const colors = {
   black: "#111111",
   grey: "#dedede",
   greyDark: "#424242",
-  blue: "#304dab",
+  red: "#d14545",
 };
 
 const spacings = {
