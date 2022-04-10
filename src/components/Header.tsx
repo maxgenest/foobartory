@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Button } from "./style";
 
 export const Header: React.FC = () => {
   const startNewGame = () => {
@@ -7,46 +8,37 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <Wrapper>
+    <StyledHeader>
       <StyledButton onClick={startNewGame}>Nouveau jeu</StyledButton>
 
-      <List>
-        <Item>X robots</Item>
-        <Item>X foo</Item>
-        <Item>X bar</Item>
-        <Item>X foobar</Item>
-      </List>
-    </Wrapper>
+      <StyledUl>
+        <StyledLi>X robots</StyledLi>
+        <StyledLi>X foo</StyledLi>
+        <StyledLi>X bar</StyledLi>
+        <StyledLi>X foobar</StyledLi>
+      </StyledUl>
+    </StyledHeader>
   );
 };
 
-const Wrapper = styled.header`
-  padding: ${({ theme }) => theme.spacings.m};
+const StyledHeader = styled.header`
+  margin-bottom: ${({ theme }) => theme.spacings.m};
   display: flex;
   align-items: center;
 `;
-const List = styled.ul`
+const StyledUl = styled.ul`
   display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
   border: 1px solid ${({ theme }) => theme.colors.grey};
   width: fit-content;
   border-radius: ${({ theme }) => theme.spacings.xs};
 `;
-const Item = styled.li`
+const StyledLi = styled.li`
   padding: ${({ theme }) => theme.spacings.s};
 
   :not(:last-child) {
     border-right: 1px solid ${({ theme }) => theme.colors.grey};
   }
 `;
-const StyledButton = styled.button`
-  padding: ${({ theme }) => theme.spacings.s};
-  height: fit-content;
+const StyledButton = styled(Button)`
   margin-right: ${({ theme }) => theme.spacings.m};
-  border-radius: ${({ theme }) => theme.spacings.xs};
-  background: ${({ theme }) => theme.colors.black};
-  color: ${({ theme }) => theme.colors.white};
-  border: none;
 `;

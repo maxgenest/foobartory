@@ -5,6 +5,7 @@ declare module "styled-components" {
     name: string;
     spacings: typeof spacings;
     colors: typeof colors;
+    fontSizes: typeof fontSizes;
   }
 }
 
@@ -21,8 +22,14 @@ const spacings = {
   l: "64px",
 };
 
+const fontSizes = {
+  s: "12px",
+  m: "16px",
+};
+
 export const theme: DefaultTheme = {
   name: "foobartory",
   spacings,
   colors,
+  fontSizes,
 };
