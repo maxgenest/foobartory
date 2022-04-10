@@ -48,7 +48,6 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
         } else {
           setError("Ressource insuffisante");
         }
-        dispatchGame({ type: "addRobots", nbNewRobots: 1 });
         break;
 
       default:
