@@ -13,6 +13,8 @@ const colors = {
   white: "#fff",
   black: "#111111",
   grey: "#dedede",
+  greyDark: "#424242",
+  blue: "#304dab",
 };
 
 const spacings = {

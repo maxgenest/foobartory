@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
 
   return (
     <StyledHeader>
-      <StyledButton onClick={startNewGame}>Nouveau jeu</StyledButton>
+      <Button onClick={startNewGame}>Nouveau jeu</Button>
 
       <StyledUl>
         <StyledLi>X robots</StyledLi>
@@ -31,6 +31,7 @@ const StyledUl = styled.ul`
   border: 1px solid ${({ theme }) => theme.colors.grey};
   width: fit-content;
   border-radius: ${({ theme }) => theme.spacings.xs};
+  margin-left: ${({ theme }) => theme.spacings.m};
 `;
 const StyledLi = styled.li`
   padding: ${({ theme }) => theme.spacings.s};
@@ -38,7 +39,4 @@ const StyledLi = styled.li`
   :not(:last-child) {
     border-right: 1px solid ${({ theme }) => theme.colors.grey};
   }
-`;
-const StyledButton = styled(Button)`
-  margin-right: ${({ theme }) => theme.spacings.m};
 `;
