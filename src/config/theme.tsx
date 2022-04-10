@@ -15,9 +15,10 @@ const colors = {
 };
 
 const spacings = {
-  s: "15px",
-  m: "30px",
-  l: "60px",
+  xs: "8px",
+  s: "16px",
+  m: "32px",
+  l: "64px",
 };
 
 export const theme: DefaultTheme = {
