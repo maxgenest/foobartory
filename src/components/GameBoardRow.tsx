@@ -13,6 +13,7 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
   const { nbBars, nbFoobars, nbFoos, nbFreeRobots, dispatchGame } =
     useContext(GameContext);
   const [error, setError] = useState<null | string>(null);
+  const [isResourceBuilding, setIsResourceBuilding] = useState(false);
 
   const onClick = (resource: IResource) => {
     setError(null);
@@ -23,18 +24,24 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
 
     switch (resource.name) {
       case "foo":
-        dispatchGame({ type: "addFoos", nbNewFoos: 1 });
+        buildResource(() => {
+          dispatchGame({ type: "addFoos", nbNewFoos: 1 });
+        }, 1);
         break;
 
       case "bar":
-        dispatchGame({ type: "addBars", nbNewBars: 1 });
+        buildResource(() => {
+          dispatchGame({ type: "addBars", nbNewBars: 1 });
+        }, Math.random() * 2 - 0.5);
         break;
 
       case "foobar":
         if (nbFoos >= 1 && nbBars >= 1) {
-          dispatchGame({ type: "addFoobars", nbNewFoobars: 1 });
-          dispatchGame({ type: "removeFoos", nbRmFoos: 1 });
-          dispatchGame({ type: "removeBars", nbRmBars: 1 });
+          buildResource(() => {
+            dispatchGame({ type: "addFoobars", nbNewFoobars: 1 });
+            dispatchGame({ type: "removeFoos", nbRmFoos: 1 });
+            dispatchGame({ type: "removeBars", nbRmBars: 1 });
+          }, 2);
         } else {
           setError("Ressource insuffisante");
         }
@@ -42,9 +49,11 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
 
       case "robot":
         if (nbFoobars >= 3 && nbFoos >= 6) {
-          dispatchGame({ type: "addRobots", nbNewRobots: 1 });
-          dispatchGame({ type: "removeFoobars", nbRmFoobars: 3 });
-          dispatchGame({ type: "removeFoos", nbRmFoos: 6 });
+          buildResource(() => {
+            dispatchGame({ type: "addRobots", nbNewRobots: 1 });
+            dispatchGame({ type: "removeFoobars", nbRmFoobars: 3 });
+            dispatchGame({ type: "removeFoos", nbRmFoos: 6 });
+          }, 0);
         } else {
           setError("Ressource insuffisante");
         }
@@ -55,10 +64,25 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
     }
   };
 
+  const buildResource = (build: () => void, nbSeconds: number) => {
+    setIsResourceBuilding(true);
+    dispatchGame({ type: "removeFreeRobots", nbRmFreeRobots: 1 });
+
+    const timer = setTimeout(() => {
+      build();
+      setIsResourceBuilding(false);
+      dispatchGame({ type: "addFreeRobots", nbNewFreeRobots: 1 });
+    }, nbSeconds * 1000);
+
+    return () => clearTimeout(timer);
+  };
+
   return (
     <>
       <div>
-        <Button onClick={() => onClick(resource)}>+ 1 {resource.name}</Button>
+        <Button onClick={() => onClick(resource)} disabled={isResourceBuilding}>
+          + 1 {resource.name}
+        </Button>
         {error && <Error>{error}</Error>}
       </div>
       <NbRobotsUsed></NbRobotsUsed>
