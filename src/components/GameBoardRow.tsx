@@ -14,12 +14,14 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
     useContext(GameContext);
   const [error, setError] = useState<null | string>(null);
   const [isResourceBuilding, setIsResourceBuilding] = useState(false);
+  const [nbRobotUsed, setNbRobotUsed] = useState<number>(0);
 
   const onClick = (resource: IResource) => {
     setError(null);
 
     if (nbFreeRobots < 1) {
       setError("Aucun robot disponible");
+      return;
     }
 
     switch (resource.name) {
@@ -67,11 +69,13 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
   const buildResource = (build: () => void, nbSeconds: number) => {
     setIsResourceBuilding(true);
     dispatchGame({ type: "removeFreeRobots", nbRmFreeRobots: 1 });
+    setNbRobotUsed(1);
 
     const timer = setTimeout(() => {
       build();
       setIsResourceBuilding(false);
       dispatchGame({ type: "addFreeRobots", nbNewFreeRobots: 1 });
+      setNbRobotUsed(0);
     }, nbSeconds * 1000);
 
     return () => clearTimeout(timer);
@@ -85,7 +89,10 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
         </Button>
         {error && <Error>{error}</Error>}
       </div>
-      <NbRobotsUsed></NbRobotsUsed>
+      <NbRobotsUsed>
+        {nbRobotUsed} robot{nbRobotUsed > 1 ? "s" : ""} occupé
+        {nbRobotUsed > 1 ? "s" : ""}
+      </NbRobotsUsed>
       <Cost>{getCostString(resource.cost)}</Cost>
       <Time>{resource.time}</Time>
     </>

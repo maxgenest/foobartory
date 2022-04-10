@@ -8,9 +8,6 @@ export const GameBoard: React.FC = () => (
     {RESOURCES.map((resource) => (
       <GameBoardRow resource={resource} />
     ))}
-
-    <p>Ne fait rien</p>
-    <NbRobotsUsed>2 robots</NbRobotsUsed>
   </Wrapper>
 );
 
