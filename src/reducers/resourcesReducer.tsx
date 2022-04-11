@@ -92,6 +92,7 @@ const resourcesReducer = (
         robot: {
           ...state.robot,
           nbResting: state.robot.nbResting + 1,
+          quantity: state.robot.quantity + 1,
         },
         foo: {
           ...state.foo,
