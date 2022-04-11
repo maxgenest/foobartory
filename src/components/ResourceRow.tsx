@@ -146,7 +146,7 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
         </div>
 
         {name === "Robot" ? (
-          <div />
+          <Column />
         ) : (
           <Column>
             {nbMiningRobots} robot{nbMiningRobots > 1 ? "s" : ""} qui minent

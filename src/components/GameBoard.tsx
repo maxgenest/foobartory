@@ -25,7 +25,7 @@ export const GameBoard: React.FC = () => {
 };
 
 const Wrapper = styled.div`
-  max-width: 700px;
+  max-width: 900px;
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;

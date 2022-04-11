@@ -39,7 +39,7 @@ const StyledUl = styled.ul`
   border: 1px solid ${({ theme }) => theme.colors.grey};
   width: fit-content;
   border-radius: ${({ theme }) => theme.spacings.xs};
-  margin-left: ${({ theme }) => theme.spacings.m};
+  margin-left: ${({ theme }) => theme.spacings.s};
 `;
 const StyledLi = styled.li`
   padding: ${({ theme }) => theme.spacings.s};
