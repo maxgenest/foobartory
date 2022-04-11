@@ -4,13 +4,12 @@ import { Button } from "./style";
 import styled from "styled-components";
 import { ResourcesContext } from "../contexts/ResourcesContext";
 import { IResource, IRobot, ICost } from "../reducers/resourcesReducer";
-import { Action } from "../reducers/gameReducer";
 
 interface IProps {
   resource: IResource | IRobot;
 }
 
-export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
+export const ResourceRow: React.FC<IProps> = ({ resource }) => {
   const { name, nbMiningRobots, quantity, cost, time, successRate } = resource;
   const { foo, bar, foobar, robot, dispatchResource } =
     useContext(ResourcesContext);
@@ -32,11 +31,23 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
     }
 
     const timer = setTimeout(() => {
-      console.log("coucou");
-      setLoop(!loop);
-    }, 1000);
+      console.log("foo.quantity", foo.quantity);
+      console.log("cost.foo", cost?.foo);
+
+      if (
+        !cost ||
+        (foo.quantity >= cost.foo &&
+          bar.quantity >= cost.bar &&
+          foobar.quantity >= cost.foobar)
+      ) {
+        console.log(name);
+        setLoop(!loop);
+      } else {
+        setError("ressource insuffisante pour le minage");
+      }
+    }, (time.max !== time.min ? Math.random() * time.max - time.min : time.max) * 1000);
     return () => clearTimeout(timer);
-  }, [nbMiningRobots, loop]);
+  }, [nbMiningRobots, loop, foo, bar, foobar]);
 
   // const onClick = (resource: IResource) => {
   //   setError(null);
@@ -130,36 +141,40 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
   };
 
   return (
-    <>
-      <div>
-        <ButtonsWrapper>
-          <Button
-            onClick={() => addMiningRobot()}
-            disabled={isResourceBuilding}
-          >
-            + 1 robot
-          </Button>
-          <Button
-            onClick={() => removeMiningRobot()}
-            disabled={isResourceBuilding}
-          >
-            - 1 robot
-          </Button>
-        </ButtonsWrapper>
-        {error && <Error>{error}</Error>}
-      </div>
+    <div>
+      <Title>{name}</Title>
 
-      <NbRobotsUsed>
-        {nbMiningRobots} robot{nbMiningRobots > 1 ? "s" : ""} qui minent
-        {nbMiningRobots > 1 ? "s" : ""}
-      </NbRobotsUsed>
-      <Cost>{getCostString(cost)}</Cost>
-      <Time>
-        {time.max !== time.min
-          ? `entre ${time.min} et ${time.max} secondes`
-          : `${time.max} seconde${time.max > 1 ? "s" : ""}`}
-      </Time>
-    </>
+      <Grid>
+        <div>
+          <ButtonsWrapper>
+            <Button
+              onClick={() => addMiningRobot()}
+              disabled={isResourceBuilding}
+            >
+              + 1 robot
+            </Button>
+            <Button
+              onClick={() => removeMiningRobot()}
+              disabled={isResourceBuilding}
+            >
+              - 1 robot
+            </Button>
+          </ButtonsWrapper>
+          {error && <Error>{error}</Error>}
+        </div>
+
+        <NbRobotsUsed>
+          {nbMiningRobots} robot{nbMiningRobots > 1 ? "s" : ""} qui minent
+          {nbMiningRobots > 1 ? "s" : ""}
+        </NbRobotsUsed>
+        <Cost>{getCostString(cost)}</Cost>
+        <Time>
+          {time.max !== time.min
+            ? `entre ${time.min} et ${time.max} secondes`
+            : `${time.max} seconde${time.max > 1 ? "s" : ""}`}
+        </Time>
+      </Grid>
+    </div>
   );
 };
 
@@ -187,6 +202,16 @@ const getCostString = (cost: ICost) => {
     .join(", ");
 };
 
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr 2fr;
+  align-items: center;
+`;
+const Title = styled.h2`
+  margin-bottom: ${({ theme }) => theme.spacings.xs};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey};
+  padding-bottom: ${({ theme }) => theme.spacings.xs};
+`;
 export const NbRobotsUsed = styled.div`
   padding: ${({ theme }) => theme.spacings.s};
 `;
