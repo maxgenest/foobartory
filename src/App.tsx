@@ -3,23 +3,20 @@ import styled, { ThemeProvider } from "styled-components";
 import { GameBoard } from "./components/GameBoard";
 import { Header } from "./components/Header";
 import { theme } from "./config/theme";
-import { GameContextProvider } from "./contexts/GameContext";
 import { ResourcesContextProvider } from "./contexts/ResourcesContext";
 import GlobalCss from "./global.css";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <GameContextProvider>
-        <ResourcesContextProvider>
-          <GlobalCss />
+      <ResourcesContextProvider>
+        <GlobalCss />
 
-          <Wrapper>
-            <Header />
-            <GameBoard />
-          </Wrapper>
-        </ResourcesContextProvider>
-      </GameContextProvider>
+        <Wrapper>
+          <Header />
+          <GameBoard />
+        </Wrapper>
+      </ResourcesContextProvider>
     </ThemeProvider>
   );
 }

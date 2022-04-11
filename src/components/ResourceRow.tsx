@@ -102,7 +102,7 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
 
       <Grid>
         <div>
-          <ButtonsWrapper>
+          <ButtonsColumn>
             {name === "Robot" ? (
               <Button
                 onClick={createRobot}
@@ -140,24 +140,24 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
                 </Button>
               </>
             )}
-          </ButtonsWrapper>
+          </ButtonsColumn>
           {error && <Error>{error}</Error>}
         </div>
 
         {name === "Robot" ? (
           <div />
         ) : (
-          <NbRobotsUsed>
+          <Column>
             {nbMiningRobots} robot{nbMiningRobots > 1 ? "s" : ""} qui minent
             {nbMiningRobots > 1 ? "s" : ""}
-          </NbRobotsUsed>
+          </Column>
         )}
-        <Cost>{getCostString(cost)}</Cost>
-        <Time>
+        <Column>{getCostString(cost)}</Column>
+        <Column>
           {time.max !== time.min
             ? `entre ${time.min} et ${time.max} secondes`
             : `${time.max} seconde${time.max > 1 ? "s" : ""}`}
-        </Time>
+        </Column>
       </Grid>
     </div>
   );
@@ -197,22 +197,16 @@ const Title = styled.h2`
   border-bottom: 1px solid ${({ theme }) => theme.colors.grey};
   padding-bottom: ${({ theme }) => theme.spacings.xs};
 `;
-export const NbRobotsUsed = styled.div`
+const Column = styled.div`
   padding: ${({ theme }) => theme.spacings.s};
 `;
-const Cost = styled.div`
-  padding: ${({ theme }) => theme.spacings.s};
-`;
-const Time = styled.div`
-  padding: ${({ theme }) => theme.spacings.s};
-`;
-const Error = styled.p`
-  color: ${({ theme }) => theme.colors.red};
-  margin-top: ${({ theme }) => theme.spacings.xs};
-`;
-const ButtonsWrapper = styled.div`
+const ButtonsColumn = styled.div`
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 1fr;
   gap: ${({ theme }) => theme.spacings.s};
+`;
+const Error = styled.p`
+  color: ${({ theme }) => theme.colors.red};
+  margin-top: ${({ theme }) => theme.spacings.xs};
 `;
