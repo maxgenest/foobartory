@@ -14,12 +14,7 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
   const { foo, bar, foobar, robot, dispatchResource } =
     useContext(ResourcesContext);
   const [error, setError] = useState<null | string>(null);
-  const [isResourceBuilding, setIsResourceBuilding] = useState(false);
   const [loop, setLoop] = useState(false);
-
-  // const timer = setTimeout(() => {
-  //   dispatchResource({ type: `create${name}` });
-  // }, (time.max !== time.min ? Math.random() * time.max - time.min : time.max) * 1000);
 
   useEffect(() => {
     setError(null);
@@ -31,88 +26,31 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
     }
 
     const timer = setTimeout(() => {
-      console.log("foo.quantity", foo.quantity);
-      console.log("cost.foo", cost?.foo);
-
       if (
         !cost ||
         (foo.quantity >= cost.foo &&
           bar.quantity >= cost.bar &&
           foobar.quantity >= cost.foobar)
       ) {
-        console.log(name);
+        dispatchResource({ type: `create${name}` });
         setLoop(!loop);
       } else {
         setError("ressource insuffisante pour le minage");
       }
     }, (time.max !== time.min ? Math.random() * time.max - time.min : time.max) * 1000);
     return () => clearTimeout(timer);
-  }, [nbMiningRobots, loop, foo, bar, foobar]);
-
-  // const onClick = (resource: IResource) => {
-  //   setError(null);
-
-  //   if (nbFreeRobots < 1) {
-  //     setError("Aucun robot disponible");
-  //     return;
-  //   }
-
-  //   switch (name) {
-  //     case "foo":
-  //       buildResource(() => {
-  //         dispatchGame({ type: "addFoos", nbNewFoos: 1 });
-  //       }, 1);
-  //       break;
-
-  //     case "bar":
-  //       buildResource(() => {
-  //         dispatchGame({ type: "addBars", nbNewBars: 1 });
-  //       }, Math.random() * 2 - 0.5);
-  //       break;
-
-  //     case "foobar":
-  //       if (nbFoos >= 1 && nbBars >= 1) {
-  //         buildResource(() => {
-  //           dispatchGame({ type: "addFoobars", nbNewFoobars: 1 });
-  //           dispatchGame({ type: "removeFoos", nbRmFoos: 1 });
-  //           dispatchGame({ type: "removeBars", nbRmBars: 1 });
-  //         }, 2);
-  //       } else {
-  //         setError("Ressource insuffisante");
-  //       }
-  //       break;
-
-  //     case "robot":
-  //       if (nbFoobars >= 3 && nbFoos >= 6) {
-  //         buildResource(() => {
-  //           dispatchGame({ type: "addRobots", nbNewRobots: 1 });
-  //           dispatchGame({ type: "removeFoobars", nbRmFoobars: 3 });
-  //           dispatchGame({ type: "removeFoos", nbRmFoos: 6 });
-  //         }, 0);
-  //       } else {
-  //         setError("Ressource insuffisante");
-  //       }
-  //       break;
-
-  //     default:
-  //       return;
-  //   }
-  // };
-
-  // const buildResource = (build: () => void, nbSeconds: number) => {
-  //   setIsResourceBuilding(true);
-  //   dispatchGame({ type: "removeFreeRobots", nbRmFreeRobots: 1 });
-  //   setNbRobotUsed(1);
-
-  //   const timer = setTimeout(() => {
-  //     build();
-  //     setIsResourceBuilding(false);
-  //     dispatchGame({ type: "addFreeRobots", nbNewFreeRobots: 1 });
-  //     setNbRobotUsed(0);
-  //   }, nbSeconds * 1000);
-
-  //   return () => clearTimeout(timer);
-  // };
+  }, [
+    nbMiningRobots,
+    loop,
+    foo,
+    bar,
+    foobar,
+    name,
+    time.max,
+    time.min,
+    cost,
+    dispatchResource,
+  ]);
 
   const addMiningRobot = () => {
     if (robot.nbResting < 1) {
@@ -140,6 +78,18 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
     }, 5000);
   };
 
+  const createRobot = () => {
+    if (
+      cost &&
+      foo.quantity >= cost.foo &&
+      bar.quantity >= cost.bar &&
+      foobar.quantity >= cost.foobar
+    ) {
+      dispatchResource({ type: "createRobot" });
+      return;
+    }
+  };
+
   return (
     <div>
       <Title>{name}</Title>
@@ -147,26 +97,55 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
       <Grid>
         <div>
           <ButtonsWrapper>
-            <Button
-              onClick={() => addMiningRobot()}
-              disabled={isResourceBuilding}
-            >
-              + 1 robot
-            </Button>
-            <Button
-              onClick={() => removeMiningRobot()}
-              disabled={isResourceBuilding}
-            >
-              - 1 robot
-            </Button>
+            {name === "Robot" ? (
+              <Button
+                onClick={createRobot}
+                disabled={
+                  !(
+                    cost &&
+                    foo.quantity >= cost.foo &&
+                    bar.quantity >= cost.bar &&
+                    foobar.quantity >= cost.foobar
+                  )
+                }
+              >
+                + 1 robot
+              </Button>
+            ) : (
+              <>
+                <Button
+                  onClick={addMiningRobot}
+                  disabled={
+                    !!(
+                      cost &&
+                      (foo.quantity < cost.foo ||
+                        bar.quantity < cost.bar ||
+                        foobar.quantity < cost.foobar)
+                    )
+                  }
+                >
+                  + 1 mineur
+                </Button>
+                <Button
+                  onClick={removeMiningRobot}
+                  disabled={nbMiningRobots < 1}
+                >
+                  - 1 mineur
+                </Button>
+              </>
+            )}
           </ButtonsWrapper>
           {error && <Error>{error}</Error>}
         </div>
 
-        <NbRobotsUsed>
-          {nbMiningRobots} robot{nbMiningRobots > 1 ? "s" : ""} qui minent
-          {nbMiningRobots > 1 ? "s" : ""}
-        </NbRobotsUsed>
+        {name === "Robot" ? (
+          <div />
+        ) : (
+          <NbRobotsUsed>
+            {nbMiningRobots} robot{nbMiningRobots > 1 ? "s" : ""} qui minent
+            {nbMiningRobots > 1 ? "s" : ""}
+          </NbRobotsUsed>
+        )}
         <Cost>{getCostString(cost)}</Cost>
         <Time>
           {time.max !== time.min
