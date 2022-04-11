@@ -21,7 +21,7 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
   }, [nbMiningRobots, quantity, cost, time, successRate]);
 
   useEffect(() => {
-    if (nbMiningRobots < 1) {
+    if (nbMiningRobots < 1 || robot.quantity >= 20) {
       return;
     }
 
@@ -50,6 +50,7 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
     time.min,
     cost,
     dispatchResource,
+    robot.quantity,
   ]);
 
   const addMiningRobot = () => {
