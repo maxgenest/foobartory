@@ -42,7 +42,7 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
       } else {
         setError("ressource insuffisante pour le minage");
       }
-    }, ((time.max !== time.min ? Math.random() * time.max - time.min : time.max) * 1000) / nbMiningRobots);
+    }, ((time.max !== time.min ? Math.random() * (time.max - time.min) + time.min : time.max) * 1000) / nbMiningRobots);
     return () => clearTimeout(timer);
   }, [
     nbMiningRobots,
