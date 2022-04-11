@@ -5,6 +5,10 @@ export type Action =
   | { type: "createFoo" }
   | { type: "createBar" }
   | { type: "createFoobar" }
+  | { type: "destroyRobot"; quantity: number }
+  | { type: "destroyFoo"; quantity: number }
+  | { type: "destroyBar"; quantity: number }
+  | { type: "destroyFoobar"; quantity: number }
   | { type: "moveRobot" }
   | { type: "mineRobot" }
   | { type: "mineFoo" }
@@ -136,6 +140,42 @@ const resourcesReducer = (
         bar: {
           ...state.bar,
           quantity: state.bar.quantity - 1,
+        },
+      };
+
+    case "destroyRobot":
+      return {
+        ...state,
+        robot: {
+          ...state.robot,
+          quantity: state.robot.quantity - action.quantity,
+        },
+      };
+
+    case "destroyFoo":
+      return {
+        ...state,
+        foo: {
+          ...state.foo,
+          quantity: state.foo.quantity - action.quantity,
+        },
+      };
+
+    case "destroyBar":
+      return {
+        ...state,
+        bar: {
+          ...state.bar,
+          quantity: state.bar.quantity - action.quantity,
+        },
+      };
+
+    case "destroyFoobar":
+      return {
+        ...state,
+        foobar: {
+          ...state.foobar,
+          quantity: state.foobar.quantity - action.quantity,
         },
       };
 

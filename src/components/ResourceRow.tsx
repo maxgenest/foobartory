@@ -32,7 +32,11 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
           bar.quantity >= cost.bar &&
           foobar.quantity >= cost.foobar)
       ) {
-        dispatchResource({ type: `create${name}` });
+        if (Math.random() + successRate >= 1) {
+          dispatchResource({ type: `create${name}` });
+        } else {
+          dispatchResource({ type: `destroyFoo`, quantity: 1 });
+        }
         setLoop(!loop);
       } else {
         setError("ressource insuffisante pour le minage");
@@ -51,6 +55,7 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
     cost,
     dispatchResource,
     robot.quantity,
+    successRate,
   ]);
 
   const addMiningRobot = () => {
