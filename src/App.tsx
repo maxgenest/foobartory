@@ -6,6 +6,8 @@ import { theme } from "./config/theme";
 import { ResourcesContextProvider } from "./contexts/ResourcesContext";
 import GlobalCss from "./global.css";
 
+export const VICTORY_NB_ROBOTS = 20;
+
 function App() {
   return (
     <ThemeProvider theme={theme}>

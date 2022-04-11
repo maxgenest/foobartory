@@ -4,6 +4,7 @@ import { Button } from "./style";
 import styled from "styled-components";
 import { ResourcesContext } from "../contexts/ResourcesContext";
 import { IResource, IRobot, ICost } from "../reducers/resourcesReducer";
+import { VICTORY_NB_ROBOTS } from "../App";
 
 interface IProps {
   resource: IResource | IRobot;
@@ -21,7 +22,7 @@ export const ResourceRow: React.FC<IProps> = ({ resource }) => {
   }, [nbMiningRobots, quantity, cost, time, successRate]);
 
   useEffect(() => {
-    if (nbMiningRobots < 1 || robot.quantity >= 20) {
+    if (nbMiningRobots < 1 || robot.quantity >= VICTORY_NB_ROBOTS) {
       return;
     }
 

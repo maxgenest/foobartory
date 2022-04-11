@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import { ResourcesContext } from "../contexts/ResourcesContext";
 import { ResourceRow } from "./ResourceRow";
+import { VICTORY_NB_ROBOTS } from "../App";
 
 export const GameBoard: React.FC = () => {
   const { foo, bar, foobar, robot } = useContext(ResourcesContext);
@@ -9,8 +10,8 @@ export const GameBoard: React.FC = () => {
   return (
     <Wrapper>
       <h1>Foobartory</h1>
-      {robot.quantity >= 20 ? (
-        <p>VICTOIRE, tu as créé 20 robots</p>
+      {robot.quantity >= VICTORY_NB_ROBOTS ? (
+        <p>VICTOIRE, tu as créé {VICTORY_NB_ROBOTS} robots</p>
       ) : (
         <>
           <ResourceRow resource={foo} />
