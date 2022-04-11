@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useContext } from "react";
-import { GameContext } from "../contexts/GameContext";
 import { Button } from "./style";
 import styled from "styled-components";
 import { ResourcesContext } from "../contexts/ResourcesContext";
-import { IResource2, IRobot, ICost } from "../reducers/resourcesRducer";
+import { IResource, IRobot, ICost } from "../reducers/resourcesRducer";
 
 interface IProps {
-  resource: IResource2 | IRobot;
+  resource: IResource | IRobot;
 }
 
 export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
@@ -83,8 +82,7 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
   //   return () => clearTimeout(timer);
   // };
 
-  const addMiningRobot = (resource: IResource2) => {
-    console.log("resource", resource);
+  const addMiningRobot = () => {
     if (robot.nbResting < 1) {
       setError("aucun robot disponible");
       return;
@@ -93,21 +91,20 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
     // if cost and enough resources then setTimeout 5s for moving robot
   };
 
-  const removeMiningRobot = (resource: IResource2) => {
-    console.log("resource", resource);
+  const removeMiningRobot = () => {
+    if (nbMiningRobots < 1) {
+      return;
+    }
   };
 
   return (
     <>
       <ButtonsWrapper>
-        <Button
-          onClick={() => addMiningRobot(resource as IResource2)}
-          disabled={isResourceBuilding}
-        >
+        <Button onClick={() => addMiningRobot()} disabled={isResourceBuilding}>
           + 1 robot
         </Button>
         <Button
-          onClick={() => removeMiningRobot(resource as IResource2)}
+          onClick={() => removeMiningRobot()}
           disabled={isResourceBuilding}
         >
           - 1 robot

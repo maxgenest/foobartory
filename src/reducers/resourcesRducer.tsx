@@ -12,7 +12,7 @@ export type Action =
 
 export type ICost = null | { foo: number; bar: number; foobar: number };
 
-export interface IResource2 {
+export interface IResource {
   quantity: number;
   time: { min: number; max: number };
   cost: ICost;
@@ -20,16 +20,16 @@ export interface IResource2 {
   nbMiningRobots: number;
 }
 
-export interface IRobot extends IResource2 {
+export interface IRobot extends IResource {
   nbResting: number;
   nbMoving: number;
   nbMining: number;
 }
 
 const initialState: {
-  foo: IResource2;
-  bar: IResource2;
-  foobar: IResource2;
+  foo: IResource;
+  bar: IResource;
+  foobar: IResource;
   robot: IRobot;
 } = {
   foo: {

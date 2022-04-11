@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { RESOURCES } from "../config/utils";
 import { ResourcesContext } from "../contexts/ResourcesContext";
-import { GameBoardRow, NbRobotsUsed } from "./GameBoardRow";
+import { GameBoardRow } from "./GameBoardRow";
 
 export const GameBoard: React.FC = () => {
   const { foo, bar, foobar, robot } = useContext(ResourcesContext);
