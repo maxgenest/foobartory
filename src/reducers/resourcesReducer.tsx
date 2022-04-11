@@ -149,7 +149,6 @@ const resourcesReducer = (
       };
 
     case "mineFoo":
-      console.log("mineFoo");
       return {
         ...state,
         robot: {

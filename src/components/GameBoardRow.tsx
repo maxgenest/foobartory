@@ -11,16 +11,32 @@ interface IProps {
 }
 
 export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
+  const { name, nbMiningRobots, quantity, cost, time, successRate } = resource;
   const { foo, bar, foobar, robot, dispatchResource } =
     useContext(ResourcesContext);
   const [error, setError] = useState<null | string>(null);
   const [isResourceBuilding, setIsResourceBuilding] = useState(false);
+  const [loop, setLoop] = useState(false);
 
-  const { name, nbMiningRobots, quantity, cost, time, successRate } = resource;
+  // const timer = setTimeout(() => {
+  //   dispatchResource({ type: `create${name}` });
+  // }, (time.max !== time.min ? Math.random() * time.max - time.min : time.max) * 1000);
 
   useEffect(() => {
     setError(null);
   }, [nbMiningRobots, quantity, cost, time, successRate]);
+
+  useEffect(() => {
+    if (nbMiningRobots < 1) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      console.log("coucou");
+      setLoop(!loop);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [nbMiningRobots, loop]);
 
   // const onClick = (resource: IResource) => {
   //   setError(null);
@@ -98,8 +114,6 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
     setTimeout(() => {
       dispatchResource({ type: `mine${name}` });
     }, 5000);
-
-    // if cost and enough resources then setTimeout 5s for moving robot
   };
 
   const removeMiningRobot = () => {
@@ -109,6 +123,7 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
     }
 
     dispatchResource({ type: `rm${name}MiningRobot` });
+
     setTimeout(() => {
       dispatchResource({ type: "addRestingRobot" });
     }, 5000);
