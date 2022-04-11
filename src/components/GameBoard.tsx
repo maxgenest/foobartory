@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { RESOURCES } from "../config/utils";
+import { ResourcesContext } from "../contexts/ResourcesContext";
 import { GameBoardRow, NbRobotsUsed } from "./GameBoardRow";
 
-export const GameBoard: React.FC = () => (
-  <Wrapper>
-    {RESOURCES.map((resource) => (
-      <GameBoardRow resource={resource} />
-    ))}
-  </Wrapper>
-);
+export const GameBoard: React.FC = () => {
+  const { foo, bar, foobar, robot } = useContext(ResourcesContext);
+
+  return (
+    <Wrapper>
+      <GameBoardRow resource={foo} />
+      <GameBoardRow resource={bar} />
+      <GameBoardRow resource={foobar} />
+      <GameBoardRow resource={robot} />
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   max-width: 700px;

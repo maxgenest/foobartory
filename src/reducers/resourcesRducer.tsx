@@ -10,7 +10,28 @@ export type Action =
   | { type: "mineBar" }
   | { type: "mineFoobar" };
 
-const initialState = {
+export type ICost = null | { foo: number; bar: number; foobar: number };
+
+export interface IResource2 {
+  quantity: number;
+  time: { min: number; max: number };
+  cost: ICost;
+  successRate: number;
+  nbMiningRobots: number;
+}
+
+export interface IRobot extends IResource2 {
+  nbResting: number;
+  nbMoving: number;
+  nbMining: number;
+}
+
+const initialState: {
+  foo: IResource2;
+  bar: IResource2;
+  foobar: IResource2;
+  robot: IRobot;
+} = {
   foo: {
     quantity: 0,
     time: { min: 1, max: 1 },
@@ -28,17 +49,19 @@ const initialState = {
   foobar: {
     quantity: 0,
     time: { min: 2, max: 2 },
-    cost: { foo: 1, bar: 1 },
+    cost: { foo: 1, bar: 1, foobar: 0 },
     successRate: 0.6,
     nbMiningRobots: 0,
   },
   robot: {
+    quantity: 2,
     nbResting: 2,
     nbMoving: 0,
     nbMining: 0,
     time: { min: 0, max: 0 },
-    cost: { foobar: 3, foo: 6 },
+    cost: { foo: 6, bar: 0, foobar: 3 },
     successRate: 1,
+    nbMiningRobots: 0,
   },
 };
 

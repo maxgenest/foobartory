@@ -3,21 +3,20 @@ import { useContext } from "react";
 import { GameContext } from "../contexts/GameContext";
 import { Button } from "./style";
 import styled from "styled-components";
-import { IResource, ICost } from "../config/utils";
 import { ResourcesContext } from "../contexts/ResourcesContext";
+import { IResource2, IRobot, ICost } from "../reducers/resourcesRducer";
 
 interface IProps {
-  resource: IResource;
+  resource: IResource2 | IRobot;
 }
 
 export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
-  const { nbBars, nbFoobars, nbFoos, nbFreeRobots, dispatchGame } =
-    useContext(GameContext);
   const { foo, bar, foobar, robot, dispatchResource } =
     useContext(ResourcesContext);
   const [error, setError] = useState<null | string>(null);
   const [isResourceBuilding, setIsResourceBuilding] = useState(false);
-  const [nbRobotUsed, setNbRobotUsed] = useState<number>(0);
+
+  const { nbMiningRobots, quantity, cost, time, successRate } = resource;
 
   // const onClick = (resource: IResource) => {
   //   setError(null);
@@ -27,7 +26,7 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
   //     return;
   //   }
 
-  //   switch (resource.name) {
+  //   switch (name) {
   //     case "foo":
   //       buildResource(() => {
   //         dispatchGame({ type: "addFoos", nbNewFoos: 1 });
@@ -84,15 +83,17 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
   //   return () => clearTimeout(timer);
   // };
 
-  const addMiningRobot = (resource: IResource) => {
+  const addMiningRobot = (resource: IResource2) => {
     console.log("resource", resource);
     if (robot.nbResting < 1) {
       setError("aucun robot disponible");
       return;
     }
+
+    // if cost and enough resources then setTimeout 5s for moving robot
   };
 
-  const removeMiningRobot = (resource: IResource) => {
+  const removeMiningRobot = (resource: IResource2) => {
     console.log("resource", resource);
   };
 
@@ -100,13 +101,13 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
     <>
       <ButtonsWrapper>
         <Button
-          onClick={() => addMiningRobot(resource)}
+          onClick={() => addMiningRobot(resource as IResource2)}
           disabled={isResourceBuilding}
         >
           + 1 robot
         </Button>
         <Button
-          onClick={() => removeMiningRobot(resource)}
+          onClick={() => removeMiningRobot(resource as IResource2)}
           disabled={isResourceBuilding}
         >
           - 1 robot
@@ -114,11 +115,15 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
         {error && <Error>{error}</Error>}
       </ButtonsWrapper>
       <NbRobotsUsed>
-        {nbRobotUsed} robot{nbRobotUsed > 1 ? "s" : ""} qui minent
-        {nbRobotUsed > 1 ? "s" : ""}
+        {nbMiningRobots} robot{nbMiningRobots > 1 ? "s" : ""} qui minent
+        {nbMiningRobots > 1 ? "s" : ""}
       </NbRobotsUsed>
-      <Cost>{getCostString(resource.cost)}</Cost>
-      <Time>{resource.time}</Time>
+      <Cost>{getCostString(cost)}</Cost>
+      <Time>
+        {time.max !== time.min
+          ? `entre ${time.min} et ${time.max} secondes`
+          : `${time.max} seconde${time.max > 1 ? "s" : ""}`}
+      </Time>
     </>
   );
 };
