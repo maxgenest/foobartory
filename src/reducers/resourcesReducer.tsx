@@ -6,13 +6,20 @@ export type Action =
   | { type: "createBar" }
   | { type: "createFoobar" }
   | { type: "moveRobot" }
+  | { type: "mineRobot" }
   | { type: "mineFoo" }
   | { type: "mineBar" }
-  | { type: "mineFoobar" };
+  | { type: "mineFoobar" }
+  | { type: "rmRobotMiningRobot" }
+  | { type: "rmFooMiningRobot" }
+  | { type: "rmBarMiningRobot" }
+  | { type: "rmFoobarMiningRobot" }
+  | { type: "addRestingRobot" };
 
 export type ICost = null | { foo: number; bar: number; foobar: number };
 
 export interface IResource {
+  name: "Foo" | "Bar" | "Foobar" | "Robot";
   quantity: number;
   time: { min: number; max: number };
   cost: ICost;
@@ -33,6 +40,7 @@ const initialState: {
   robot: IRobot;
 } = {
   foo: {
+    name: "Foo",
     quantity: 0,
     time: { min: 1, max: 1 },
     cost: null,
@@ -40,6 +48,7 @@ const initialState: {
     nbMiningRobots: 0,
   },
   bar: {
+    name: "Bar",
     quantity: 0,
     time: { min: 0.5, max: 2 },
     cost: null,
@@ -47,6 +56,7 @@ const initialState: {
     nbMiningRobots: 0,
   },
   foobar: {
+    name: "Foobar",
     quantity: 0,
     time: { min: 2, max: 2 },
     cost: { foo: 1, bar: 1, foobar: 0 },
@@ -54,6 +64,7 @@ const initialState: {
     nbMiningRobots: 0,
   },
   robot: {
+    name: "Robot",
     quantity: 2,
     nbResting: 2,
     nbMoving: 0,
@@ -138,12 +149,13 @@ const resourcesReducer = (
       };
 
     case "mineFoo":
+      console.log("mineFoo");
       return {
         ...state,
         robot: {
           ...state.robot,
           nbMoving: state.robot.nbMoving - 1,
-          nbMining: state.robot.nbMining,
+          nbMining: state.robot.nbMining + 1,
         },
         foo: {
           ...state.foo,
@@ -157,7 +169,7 @@ const resourcesReducer = (
         robot: {
           ...state.robot,
           nbMoving: state.robot.nbMoving - 1,
-          nbMining: state.robot.nbMining,
+          nbMining: state.robot.nbMining + 1,
         },
         bar: {
           ...state.bar,
@@ -171,11 +183,74 @@ const resourcesReducer = (
         robot: {
           ...state.robot,
           nbMoving: state.robot.nbMoving - 1,
-          nbMining: state.robot.nbMining,
+          nbMining: state.robot.nbMining + 1,
         },
         foobar: {
           ...state.foobar,
           nbMiningRobots: state.foobar.nbMiningRobots + 1,
+        },
+      };
+
+    case "rmRobotMiningRobot":
+      return {
+        ...state,
+        robot: {
+          ...state.robot,
+          nbMoving: state.robot.nbMoving + 1,
+          nbMining: state.robot.nbMining - 1,
+          nbMiningRobots: state.robot.nbMiningRobots - 1,
+        },
+      };
+
+    case "rmFooMiningRobot":
+      return {
+        ...state,
+        robot: {
+          ...state.robot,
+          nbMoving: state.robot.nbMoving + 1,
+          nbMining: state.robot.nbMining - 1,
+        },
+        foo: {
+          ...state.foo,
+          nbMiningRobots: state.foo.nbMiningRobots - 1,
+        },
+      };
+
+    case "rmBarMiningRobot":
+      return {
+        ...state,
+        robot: {
+          ...state.robot,
+          nbMoving: state.robot.nbMoving + 1,
+          nbMining: state.robot.nbMining - 1,
+        },
+        bar: {
+          ...state.bar,
+          nbMiningRobots: state.bar.nbMiningRobots - 1,
+        },
+      };
+
+    case "rmFoobarMiningRobot":
+      return {
+        ...state,
+        robot: {
+          ...state.robot,
+          nbMoving: state.robot.nbMoving + 1,
+          nbMining: state.robot.nbMining - 1,
+        },
+        foobar: {
+          ...state.foobar,
+          nbMiningRobots: state.foobar.nbMiningRobots - 1,
+        },
+      };
+
+    case "addRestingRobot":
+      return {
+        ...state,
+        robot: {
+          ...state.robot,
+          nbMoving: state.robot.nbMoving - 1,
+          nbResting: state.robot.nbResting + 1,
         },
       };
 

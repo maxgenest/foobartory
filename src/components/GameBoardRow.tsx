@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { Button } from "./style";
 import styled from "styled-components";
 import { ResourcesContext } from "../contexts/ResourcesContext";
-import { IResource, IRobot, ICost } from "../reducers/resourcesRducer";
+import { IResource, IRobot, ICost } from "../reducers/resourcesReducer";
+import { Action } from "../reducers/gameReducer";
 
 interface IProps {
   resource: IResource | IRobot;
@@ -15,7 +16,11 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
   const [error, setError] = useState<null | string>(null);
   const [isResourceBuilding, setIsResourceBuilding] = useState(false);
 
-  const { nbMiningRobots, quantity, cost, time, successRate } = resource;
+  const { name, nbMiningRobots, quantity, cost, time, successRate } = resource;
+
+  useEffect(() => {
+    setError(null);
+  }, [nbMiningRobots, quantity, cost, time, successRate]);
 
   // const onClick = (resource: IResource) => {
   //   setError(null);
@@ -88,29 +93,47 @@ export const GameBoardRow: React.FC<IProps> = ({ resource }) => {
       return;
     }
 
+    dispatchResource({ type: "moveRobot" });
+
+    setTimeout(() => {
+      dispatchResource({ type: `mine${name}` });
+    }, 5000);
+
     // if cost and enough resources then setTimeout 5s for moving robot
   };
 
   const removeMiningRobot = () => {
     if (nbMiningRobots < 1) {
+      setError("aucun robot ne mine cette ressource");
       return;
     }
+
+    dispatchResource({ type: `rm${name}MiningRobot` });
+    setTimeout(() => {
+      dispatchResource({ type: "addRestingRobot" });
+    }, 5000);
   };
 
   return (
     <>
-      <ButtonsWrapper>
-        <Button onClick={() => addMiningRobot()} disabled={isResourceBuilding}>
-          + 1 robot
-        </Button>
-        <Button
-          onClick={() => removeMiningRobot()}
-          disabled={isResourceBuilding}
-        >
-          - 1 robot
-        </Button>
+      <div>
+        <ButtonsWrapper>
+          <Button
+            onClick={() => addMiningRobot()}
+            disabled={isResourceBuilding}
+          >
+            + 1 robot
+          </Button>
+          <Button
+            onClick={() => removeMiningRobot()}
+            disabled={isResourceBuilding}
+          >
+            - 1 robot
+          </Button>
+        </ButtonsWrapper>
         {error && <Error>{error}</Error>}
-      </ButtonsWrapper>
+      </div>
+
       <NbRobotsUsed>
         {nbMiningRobots} robot{nbMiningRobots > 1 ? "s" : ""} qui minent
         {nbMiningRobots > 1 ? "s" : ""}
@@ -160,6 +183,7 @@ const Time = styled.div`
 `;
 const Error = styled.p`
   color: ${({ theme }) => theme.colors.red};
+  margin-top: ${({ theme }) => theme.spacings.xs};
 `;
 const ButtonsWrapper = styled.div`
   display: grid;

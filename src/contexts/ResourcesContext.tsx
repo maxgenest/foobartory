@@ -4,7 +4,7 @@ import {
   AppState,
   resourcesReducer,
   initialState,
-} from "../reducers/resourcesRducer";
+} from "../reducers/resourcesReducer";
 
 interface Props {
   children: ReactNode;
