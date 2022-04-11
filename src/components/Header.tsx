@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { GameContext } from "../contexts/GameContext";
+import { ResourcesContext } from "../contexts/ResourcesContext";
 import { Button } from "./style";
 
 export const Header: React.FC = () => {
-  const { nbBars, nbFoobars, nbFoos, nbRobots, nbFreeRobots, dispatchGame } =
-    useContext(GameContext);
+  const { foo, bar, foobar, robot, dispatchResource } =
+    useContext(ResourcesContext);
 
   const startNewGame = () => {
-    dispatchGame({ type: "resetGame" });
+    dispatchResource({ type: "resetGame" });
   };
 
   return (
@@ -16,11 +16,12 @@ export const Header: React.FC = () => {
       <Button onClick={startNewGame}>Nouveau jeu</Button>
 
       <StyledUl>
-        <StyledLi>{nbRobots} robots</StyledLi>
-        <StyledLi>{nbFreeRobots} robots disponibles</StyledLi>
-        <StyledLi>{nbFoos} foo</StyledLi>
-        <StyledLi>{nbBars} bar</StyledLi>
-        <StyledLi>{nbFoobars} foobar</StyledLi>
+        <StyledLi>{robot.nbResting} robots inactifs</StyledLi>
+        <StyledLi>{robot.nbMoving} robots en mouvement</StyledLi>
+        <StyledLi>{robot.nbMining} robots qui minent</StyledLi>
+        <StyledLi>{foo.quantity} foo</StyledLi>
+        <StyledLi>{bar.quantity} bar</StyledLi>
+        <StyledLi>{foobar.quantity} foobar</StyledLi>
       </StyledUl>
     </StyledHeader>
   );

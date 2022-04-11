@@ -4,18 +4,21 @@ import { GameBoard } from "./components/GameBoard";
 import { Header } from "./components/Header";
 import { theme } from "./config/theme";
 import { GameContextProvider } from "./contexts/GameContext";
+import { ResourcesContextProvider } from "./contexts/ResourcesContext";
 import GlobalCss from "./global.css";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <GameContextProvider>
-        <GlobalCss />
+        <ResourcesContextProvider>
+          <GlobalCss />
 
-        <Wrapper>
-          <Header />
-          <GameBoard />
-        </Wrapper>
+          <Wrapper>
+            <Header />
+            <GameBoard />
+          </Wrapper>
+        </ResourcesContextProvider>
       </GameContextProvider>
     </ThemeProvider>
   );
