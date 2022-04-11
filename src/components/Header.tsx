@@ -17,7 +17,9 @@ export const Header: React.FC = () => {
 
       <StyledUl>
         <StyledLi>{robot.nbResting} robots inactifs</StyledLi>
-        <StyledLi>{robot.nbMoving} robots en mouvement</StyledLi>
+        <StyledLi>
+          <div>{robot.nbMoving} robots en mouvement</div>
+        </StyledLi>
         <StyledLi>{robot.nbMining} robots qui minent</StyledLi>
         <StyledLi>{foo.quantity} foo</StyledLi>
         <StyledLi>{bar.quantity} bar</StyledLi>
